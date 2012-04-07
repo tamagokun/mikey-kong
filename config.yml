@@ -1,0 +1,6 @@
+application: mikey-kong
+deploy_to: ./
+document_class: app/MikeyKong.as
+debug: true
+libs:
+  - vendor/
