@@ -1,6 +1,7 @@
 package
 {
 	import org.flixel.*;
+	import elements.*;
 	
 	public class PlayState extends FlxState
 	{
@@ -11,14 +12,14 @@ package
 		public var score:FlxText;
 		public var time:FlxText;
 		
-		[Embed(source="")]
+		[Embed(source="../assets/brick.gif")] private var ImgBrick:Class;
 		
 		override public function create():void
 		{
 			//level init stuff
 			
 			level = new FlxTilemap();
-			level.loadMap();
+			//level.loadMap();
 			add(level);
 			
 			
@@ -26,28 +27,19 @@ package
 		
 		public function create_barrel(X:uint,Y:uint):void
 		{
-			var barrel:FlxSprite = new FlxSprite();
-			barrel.makeGraphic();
+			var barrel:Barrel = new Barrel(X,Y);
 			barrels.add(barrel);
 		}
 		
 		override public function update():void
-		{
-			mikey.acceleration.x = 0;
-			if(FlxG.keys.LEFT)
-				mikey.acceleration.x = -mikey.maxVelocity.x*4;
-			if(FlxG.keys.RIGHT)
-				mikey.acceleration.x = mikey.maxVelocity.x*4;
-			if(FlxG.keys.justPressed("SPACE") && mikey.isTouching(FlxObject.FLOOR))
-				mikey.velocity.y = -mikey.maxVelocity.y/2;
-				
+		{		
 			super.update();
 			
 			FlxG.overlap(barrels, mikey, touch_barrel);
-			FlxG.overlap(exit, mikey, win);
+			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level,mikey);
 			
-			if(player.y > FlxG.height)
+			if(mikey.y > FlxG.height)
 			{
 				FlxG.score = 1;	//sets status.text to "Aww, you died!"
 				FlxG.resetState();
@@ -60,16 +52,16 @@ package
 		{
 			//Barrel.kill();
 			score.text = "SCORE: "+(barrels.countDead()*100);
-			if(barrels.coundLiving() == 0)
+			if(barrels.countLiving() == 0)
 			{
-				status.text = "Blah";
-				exit.exists = true;
+				//status.text = "Blah";
+				//exit.exists = true;
 			}
 		}
 		
 		public function win(Exit:FlxSprite,Mikey:FlxSprite):void
 		{
-			status.text = "Yay, you won!";
+			//status.text = "Yay, you won!";
 			score.text = "SCORE: 5000";
 			Mikey.kill();
 		}

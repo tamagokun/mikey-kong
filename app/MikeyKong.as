@@ -1,14 +1,14 @@
 package
 {
 	import org.flixel.*;
-	[SWF(width="", height="", backgroundColor="#000000")]
+	[SWF(width="512", height="480", backgroundColor="#000000")]
 	[Frame(factoryClass="Preloader")]
 	
 	public class MikeyKong extends FlxGame
 	{
 		public function MikeyKong():void
 		{
-			super(320,240,PlayState,2);	//zoom x2: 640,480
+			super(256,240,PlayState,2);
 			forceDebugger = true;
 		}
 	}
