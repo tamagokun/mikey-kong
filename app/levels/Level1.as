@@ -29,13 +29,32 @@ package levels
 			
 			create_stairs(24,121,13,true);
 			
-			create_stairs(208,88,4,false);
-			
-			place_ladder(10,10,2);
+			create_stairs(208,88,5,false);
 			
 			//top
-			create_row(8,84,18);
+			create_row(8,84,16);
 			create_row(96,56,6);
+			
+			//ladders
+			place_ladder(88,213,11);
+			place_ladder(88,240,8);
+			place_ladder(192,219,24);
+			place_ladder(104,182,32);
+			place_ladder(40,186,24);
+			place_ladder(72,146,14);
+			place_ladder(72,176,8);
+			place_ladder(120,149,32);
+			place_ladder(192,153,24);
+			place_ladder(40,120,24);
+			place_ladder(80,118,28);
+			place_ladder(176,112,16);
+			place_ladder(176,144,8);
+			place_ladder(96,84,12);
+			place_ladder(96,104,13);
+			place_ladder(192,87,24);
+			place_ladder(136,56,28); //winning ladder
+			place_ladder(72,32,52);
+			place_ladder(88,32,52);
 		}
 		
 		public function create_row(X:uint,Y:uint,count:uint):void
@@ -71,9 +90,10 @@ package levels
 		
 		public function place_ladder(X:int,Y:int,height:int):void
 		{
-			var ladder:FlxSprite = place_item(X,Y,ImgLadder,ladders);
-			var i:uint = 0;
-			for(i; i < height; i++) ladder.stamp(ladder,0,i*8);
+			var ladder:FlxTileblock = new FlxTileblock(X,Y,8,height);
+			ladder.loadTiles(ImgLadder,8,8,0);
+			ladders.add(ladder);
+			ladder.frameHeight = height;
 		}
 	}
 }

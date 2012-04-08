@@ -17,8 +17,8 @@ package
 		{
 			//level init stuff
 			level = new Level1() as Level1;
-			add(level.bricks);
 			add(level.ladders);
+			add(level.bricks);
 			if(level.stairs) add(level.stairs);
 			level.create();
 			
@@ -43,8 +43,9 @@ package
 			
 			//FlxG.overlap(barrels, mikey, touch_barrel);
 			//FlxG.overlap(exit, mikey, win);
-			FlxG.collide(level.bricks, mikey);
+			FlxG.collide(level.bricks, mikey, handle_bricks);
 			FlxG.collide(level.bricks, barrels);
+			FlxG.overlap(level.ladders, mikey, handle_ladders);
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
 			
 			/*if(mikey.y > FlxG.height)
@@ -56,11 +57,23 @@ package
 			
 		}
 		
-		public function handle_stairs(Brick:FlxSprite, Mikey:FlxSprite):void
+		public function handle_bricks(Brick:FlxSprite, mikey:FlxSprite):void
 		{
-			if(Mikey.isTouching(FlxObject.FLOOR))
-				if(Mikey.y + Mikey.height > Brick.y) Mikey.y = Brick.y - Mikey.height;
-			FlxObject.separateY(Brick,Mikey);
+			Mikey(mikey).handle_brick(Brick);
+		}
+		
+		public function handle_ladders(Ladder:FlxSprite, mikey:FlxSprite):void
+		{
+			Mikey(mikey).on_ladder = true;
+			if(mikey.y + mikey.height <= Ladder.y + 2) Mikey(mikey).climbing = false;
+		}
+		
+		public function handle_stairs(Brick:FlxSprite, mikey:FlxSprite):void
+		{
+			Mikey(mikey).handle_brick(Brick);
+			if(mikey.isTouching(FlxObject.FLOOR))
+			if(mikey.y + mikey.height > Brick.y) mikey.y = Brick.y - mikey.height;
+			FlxObject.separateY(Brick,mikey);
 		}
 		
 		public function touch_barrel(Barrel:FlxSprite,Mikey:FlxSprite):void
