@@ -4,7 +4,7 @@ package elements
 	
 	public class Mikey extends FlxSprite
 	{
-		[Embed(source="../../assets/mikey.gif")] private var ImgMikey:Class;
+		[Embed(source="../../assets/mikey.png")] private var ImgMikey:Class;
 		
 		public function Mikey():void
 		{

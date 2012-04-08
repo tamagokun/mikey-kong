@@ -18,24 +18,24 @@ package levels
 		override public function create():void
 		{
 			//bottom
-			create_row(8,224,15);
-			create_stairs(128,223,5);
+			create_row(8,248,14);
+			create_stairs(120,247,7);
 			
-			create_stairs(216,188,9,false,true);
+			create_stairs(208,220,13,false);
 			
-			create_stairs(32,158,9,true,true);
+			create_stairs(24,187,13,true);
 			
-			create_stairs(216,128,9,false,true);
+			create_stairs(208,154,13,false);
 			
-			create_stairs(32,98,9,true,true);
+			create_stairs(24,121,13,true);
 			
-			create_stairs(216,68,4,false);
+			create_stairs(208,88,4,false);
 			
 			place_ladder(10,10,2);
 			
 			//top
-			create_row(16,64,14);
-			create_row(104,40,6);
+			create_row(8,84,18);
+			create_row(96,56,6);
 		}
 		
 		public function create_row(X:uint,Y:uint,count:uint):void
@@ -44,7 +44,7 @@ package levels
 			for(i; i < count; i++) place_brick(X+i*8,Y);
 		}
 		
-		public function create_stairs(X:int,Y:int,count:int,right:Boolean=true,shorten_last:Boolean=false):void
+		public function create_stairs(X:int,Y:int,count:int,right:Boolean=true):void
 		{
 			var i:uint = 0;
 			var j:uint = 0;
@@ -52,7 +52,7 @@ package levels
 			var y_offset:int = 0;
 			for(i; i < count; i++)
 			{
-				var length:int = shorten_last && i+1==count? 2 : 3;
+				var length:int = 2;
 				for(j = 0; j < length; j++)
 				{
 					var brick:FlxSprite = place_item(X+x_offset,Y+y_offset,ImgBrick,stairs);
