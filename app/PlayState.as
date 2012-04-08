@@ -45,7 +45,13 @@ package
 			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
 			
-			FlxG.collide(level.bricks, mikey, handle_bricks);
+			if(!FlxG.overlap(level.ladders, mikey, handle_ladders))
+			{
+				mikey.ladder = false;
+				mikey.climbing = false;
+				mikey.solid = true;
+			}
+			FlxG.collide(level.bricks, mikey);
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
 			
 			
@@ -56,36 +62,37 @@ package
 				FlxG.resetState();
 				
 			}*/
-			
-			Console.log(mikey.climbing);
-		}
-		
-		public function handle_bricks(Brick:FlxSprite, mikey:FlxSprite):void
-		{
-			Mikey(mikey).handle_brick(Brick);
 		}
 		
 		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
 		{
-			//mikey.ladder = Ladder;
-			//Mikey(mikey).climbing = false;
+			mikey.ladder = true;
 			
-			/*if(FlxG.keys.UP || FlxG.keys.DOWN)
+			if(FlxG.keys.UP || FlxG.keys.DOWN)
 			{
-				mikey.climbing = true;
-				//if(mikey.y + mikey.height > Ladder.y && mikey.y + mikey.height <= Ladder.y + Ladder.height)
-				//	Mikey(mikey).climbing = true;
+				if(mikey.y + mikey.height >= Ladder.y && mikey.y + mikey.height <= Ladder.y + Ladder.height)
+					mikey.climbing = true;
 			}
-			if(mikey.y + mikey.height <= Ladder.y) mikey.climbing = false;
-			if(mikey.y + mikey.height >= Ladder.y + Ladder.height) mikey.climbing = false;*/
+			
+			if(FlxG.keys.UP && mikey.climbing)
+			{
+				mikey.allowCollisions = FlxObject.DOWN;
+			}
+			
+			if(FlxG.keys.DOWN && mikey.climbing)
+			{
+				if(mikey.y > Ladder.y + 8)
+					mikey.allowCollisions = FlxObject.DOWN;
+				else
+					mikey.allowCollisions = FlxObject.UP;
+			}
 		}
 		
-		public function handle_stairs(Brick:FlxSprite, mikey:FlxSprite):void
+		public function handle_stairs(Brick:FlxSprite, Mikey:FlxSprite):void
 		{
-			Mikey(mikey).handle_brick(Brick);
 			if(mikey.isTouching(FlxObject.FLOOR))
 				if(mikey.y + mikey.height > Brick.y) mikey.y = Brick.y - mikey.height;
-			FlxObject.separateY(Brick,mikey);
+			if(!mikey.climbing) FlxObject.separateY(Brick,mikey);
 		}
 		
 		public function touch_barrel(Barrel:FlxSprite,Mikey:FlxSprite):void
