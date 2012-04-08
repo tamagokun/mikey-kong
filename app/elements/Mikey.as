@@ -4,14 +4,17 @@ package elements
 	
 	public class Mikey extends FlxSprite
 	{
-		public var on_ladder:Boolean = false;
+		public var ladder:Boolean = false;
 		public var climbing:Boolean = false;
+		
+		private var _parent:PlayState;
 		
 		[Embed(source="../../assets/mikey.png")] private var ImgMikey:Class;
 		
-		public function Mikey():void
+		public function Mikey(parent:PlayState):void
 		{
 			super(0,0,ImgMikey);
+			_parent = parent;
 			
 			x = 50;
 			
@@ -24,14 +27,11 @@ package elements
 		
 		public function handle_brick(Brick:FlxSprite):void
 		{
-			if(isTouching(FlxObject.CEILING) && climbing)
-			{
-				//no collision!
+			/*Brick.allowCollisions = FlxObject.ANY;
+			if(climbing)
 				Brick.allowCollisions = FlxObject.NONE;
-			}else
-			{
-				climbing = false;
-			}
+			else FlxObject.separate(Brick,this);
+			*/
 		}
 		
 		override public function update():void
@@ -44,26 +44,82 @@ package elements
 			if(FlxG.keys.justPressed("SPACE") && isTouching(FlxObject.FLOOR))
 				velocity.y = -maxVelocity.y/2;
 			
-			if(on_ladder)
+			ladder = FlxG.overlap(_parent.level.ladders, this);
+			
+			if(FlxG.keys.UP)
 			{
-				acceleration.y = 0;
-				if(FlxG.keys.UP)
+				if(ladder)
 				{
-					velocity.y = -16;
 					climbing = true;
 				}
-				else if(FlxG.keys.DOWN)
+			}
+			if(FlxG.keys.DOWN)
+			{
+				if(ladder)
+				{
+					climbing = true;
+				}
+			}
+			
+			if(FlxG.keys.UP && climbing)
+			{
+				velocity.y = -16;
+			}
+			else if(FlxG.keys.DOWN && climbing)
+			{
+				velocity.y = 16;
+			}
+			else if(climbing) velocity.y = 0;
+			
+			if(!ladder)
+			{
+				climbing = false;
+				
+			}
+			
+			/*if(FlxG.overlap(_parent.level.ladders, this))
+			{
+				ladder = true;
+				if(FlxG.keys.UP || FlxG.keys.DOWN)
+				{
+					mikey.climbing = true;
+					//if(mikey.y + mikey.height > Ladder.y && mikey.y + mikey.height <= Ladder.y + Ladder.height)
+					//	Mikey(mikey).climbing = true;
+				}
+				if(y + height <= Ladder.y) mikey.climbing = false;
+				if(y + height >= Ladder.y + Ladder.height) mikey.climbing = false;
+				if(FlxG.keys.UP && climbing)
+				{
+					velocity.y = -16;
+				}
+				else if(FlxG.keys.DOWN && climbing)
 				{
 					velocity.y = 16;
-					climbing = true;
-				}else velocity.y = 0;
+				}
+				else if(climbing) velocity.y = 0;
+			}else
+			{
+				mikey.ladder = false;
+				mikey.climbing = false;
+			}*/
+			
+			if(climbing) {
+				acceleration.y = 0;
 			}else
 			{
 				acceleration.y = 420;
+				solid = true;
 			}
-			on_ladder = false;
+			
+			/*if(ladder)
+			{
+				if(y + height <= ladder.y) climbing = false;
+				if(y + height >= ladder.y + ladder.height) climbing = false;
+			}*/
 			
 			super.update();
+			
+			
 		}
 	}
 }
