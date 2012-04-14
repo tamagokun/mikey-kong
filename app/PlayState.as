@@ -28,7 +28,7 @@ package
 			
 			barrels = new FlxGroup();
 			add(barrels);
-			//create_barrel(0,0);
+			create_barrel(0,0);
 		}
 		
 		public function create_barrel(X:uint,Y:uint):void
@@ -44,11 +44,12 @@ package
 			//FlxG.overlap(barrels, mikey, touch_barrel);
 			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
+			FlxG.collide(level.stairs, barrels);
 			
 			FlxG.overlap(level.ladders,mikey,handle_ladders);
+			FlxG.overlap(level.ladders, barrels, handle_barrel_ladders);
 			FlxG.collide(level.bricks, mikey)
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
-			
 			
 			
 			/*if(mikey.y > FlxG.height)
@@ -82,6 +83,18 @@ package
 			if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == FlxObject.DOWN)
 				mikey.climbing = false;
 			if(!mikey.climbing) FlxObject.separateY(Brick,mikey);
+		}
+		
+		public function handle_barrel_ladders(ladder:FlxSprite, barrel:FlxSprite):void
+		{
+			if(barrel.y + (barrel.height*.5) > ladder.y) return;
+			if(Barrel(barrel).ladder) return;
+			var chance:Number = FlxG.random()*10;
+			if(chance > 5)
+			{
+				//TODO: Perform some mikey position/facing checks for better AI
+				Barrel(barrel).down_ladder(ladder);
+			}
 		}
 		
 		public function touch_barrel(Barrel:FlxSprite,Mikey:FlxSprite):void

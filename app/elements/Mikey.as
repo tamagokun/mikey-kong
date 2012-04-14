@@ -24,7 +24,7 @@ package elements
 			maxVelocity.x = run_speed;
 			maxVelocity.y = 200;
 		}
-				
+			
 		override public function update():void
 		{
 			acceleration.x = 0;
@@ -41,12 +41,15 @@ package elements
 			
 			if(FlxG.overlap(_parent.level.ladders, this, handle_ladders))
 			{
-				if(climbing && isTouching(FlxObject.FLOOR))
+				if(ladder)
 				{
-					climbing = false;
-					solid = true;
+					if(climbing && isTouching(FlxObject.FLOOR))
+					{
+						climbing = false;
+						solid = true;
+					}
+					if(FlxG.keys.UP) climbing = true;
 				}
-				if(FlxG.keys.UP) climbing = true;
 			}else
 			{
 				ladder = false;
@@ -54,11 +57,7 @@ package elements
 				solid = true;
 			}
 			
-			if(!ladder)
-			{
-				climbing = false;
-			}
-			
+			if(!ladder) climbing = false;
 			if(climbing) {
 				acceleration.y = 0;
 			}else
@@ -71,12 +70,14 @@ package elements
 		
 		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
 		{
-			ladder = true;
+			if(x + (width*.5) > Ladder.x && x + (width*.5) < Ladder.x + Ladder.width)
+				ladder = true;
 			
 			if(FlxG.keys.UP && climbing)
 			{
 				allowCollisions = FlxObject.DOWN;
 			}
+			if(climbing) x = Ladder.x - 2;
 		}
 	}
 }
