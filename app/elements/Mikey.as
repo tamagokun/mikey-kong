@@ -39,6 +39,21 @@ package elements
 			else if(FlxG.keys.DOWN && climbing) velocity.y = 16;
 			else if(climbing) velocity.y = 0;
 			
+			if(FlxG.overlap(_parent.level.ladders, this, handle_ladders))
+			{
+				if(climbing && isTouching(FlxObject.FLOOR))
+				{
+					climbing = false;
+					solid = true;
+				}
+				if(FlxG.keys.UP) climbing = true;
+			}else
+			{
+				ladder = false;
+				climbing = false;
+				solid = true;
+			}
+			
 			if(!ladder)
 			{
 				climbing = false;
@@ -52,6 +67,16 @@ package elements
 				solid = true;
 			}
 			super.update();
+		}
+		
+		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
+		{
+			ladder = true;
+			
+			if(FlxG.keys.UP && climbing)
+			{
+				allowCollisions = FlxObject.DOWN;
+			}
 		}
 	}
 }

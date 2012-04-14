@@ -45,13 +45,8 @@ package
 			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
 			
-			if(!FlxG.overlap(level.ladders, mikey, handle_ladders))
-			{
-				mikey.ladder = false;
-				mikey.climbing = false;
-				mikey.solid = true;
-			}
-			FlxG.collide(level.bricks, mikey);
+			FlxG.overlap(level.ladders,mikey,handle_ladders);
+			FlxG.collide(level.bricks, mikey)
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
 			
 			
@@ -66,22 +61,14 @@ package
 		
 		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
 		{
-			mikey.ladder = true;
-			
-			if(FlxG.keys.UP || FlxG.keys.DOWN)
+			if(!mikey.ladder && FlxG.keys.DOWN)
 			{
-				if(mikey.y + mikey.height >= Ladder.y && mikey.y + mikey.height <= Ladder.y + Ladder.height)
-					mikey.climbing = true;
+				mikey.ladder = true;
+				mikey.climbing = true;
 			}
-			
-			if(FlxG.keys.UP && mikey.climbing)
-			{
-				mikey.allowCollisions = FlxObject.DOWN;
-			}
-			
 			if(FlxG.keys.DOWN && mikey.climbing)
 			{
-				if(mikey.y > Ladder.y + 8)
+				if(mikey.y + (mikey.height*.5) > Ladder.y)
 					mikey.allowCollisions = FlxObject.DOWN;
 				else
 					mikey.allowCollisions = FlxObject.UP;
@@ -91,7 +78,9 @@ package
 		public function handle_stairs(Brick:FlxSprite, Mikey:FlxSprite):void
 		{
 			if(mikey.isTouching(FlxObject.FLOOR))
-				if(mikey.y + mikey.height > Brick.y) mikey.y = Brick.y - mikey.height;
+				if(mikey.y + mikey.height > Brick.y && mikey.y < Brick.y) mikey.y = Brick.y - mikey.height;
+			if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == FlxObject.DOWN)
+				mikey.climbing = false;
 			if(!mikey.climbing) FlxObject.separateY(Brick,mikey);
 		}
 		
