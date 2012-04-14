@@ -28,6 +28,12 @@ package
 			
 			barrels = new FlxGroup();
 			add(barrels);
+			var barrel_timer:FlxTimer = new FlxTimer();
+			barrel_timer.start(5,0,dk_throw);
+		}
+		
+		public function dk_throw(Timer:FlxTimer):void
+		{
 			create_barrel(0,0);
 		}
 		
@@ -70,9 +76,9 @@ package
 			if(FlxG.keys.DOWN && mikey.climbing)
 			{
 				if(mikey.y + (mikey.height*.5) > Ladder.y)
-					mikey.allowCollisions = FlxObject.DOWN;
+					mikey.allowCollisions = mikey.default_collisions;
 				else
-					mikey.allowCollisions = FlxObject.UP;
+					mikey.allowCollisions = FlxObject.LEFT | FlxObject.RIGHT;
 			}
 		}
 		
@@ -80,7 +86,7 @@ package
 		{
 			if(mikey.isTouching(FlxObject.FLOOR))
 				if(mikey.y + mikey.height > Brick.y && mikey.y < Brick.y) mikey.y = Brick.y - mikey.height;
-			if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == FlxObject.DOWN)
+			if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == mikey.default_collisions)
 				mikey.climbing = false;
 			if(!mikey.climbing) FlxObject.separateY(Brick,mikey);
 		}
@@ -89,11 +95,13 @@ package
 		{
 			if(barrel.y + (barrel.height*.5) > ladder.y) return;
 			if(Barrel(barrel).ladder) return;
+			
+			//if(barrel.x < ladder.x + 2 || barrel.x > ladder.x + 10) return;
 			var chance:Number = FlxG.random()*10;
-			if(chance > 5)
+			if(chance > 3)
 			{
 				//TODO: Perform some mikey position/facing checks for better AI
-				Barrel(barrel).down_ladder(ladder);
+				Barrel(barrel).down_ladder(ladder.y + 8);
 			}
 		}
 		

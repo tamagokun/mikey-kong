@@ -24,10 +24,10 @@ package elements
 			velocity.x = 20;
 		}
 		
-		public function down_ladder(ladder:FlxSprite):void
+		public function down_ladder(switch_point:int):void
 		{
 			this.ladder = true;
-			this._under_ladder = ladder.y;
+			this._under_ladder = switch_point;
 			acceleration.y = 0;
 			velocity.x = 0;
 			velocity.y = 20;
@@ -61,6 +61,7 @@ package elements
 				if(facing == LEFT) right();
 				else left();
 			}
+			if( x <= 8 && y >= 230) kill();
 			super.update();
 		}
 	}

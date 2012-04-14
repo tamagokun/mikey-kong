@@ -6,7 +6,8 @@ package elements
 	{
 		public var ladder:Boolean = false;
 		public var climbing:Boolean = false;
-		
+		public var default_collisions:int = 0;
+
 		private var _parent:PlayState;
 		
 		[Embed(source="../../assets/mikey.png")] private var ImgMikey:Class;
@@ -15,6 +16,7 @@ package elements
 		{
 			super(0,0,ImgMikey);
 			_parent = parent;
+			default_collisions = DOWN | LEFT | RIGHT;
 			
 			x = 50;
 			
@@ -46,7 +48,7 @@ package elements
 					if(climbing && isTouching(FlxObject.FLOOR))
 					{
 						climbing = false;
-						solid = true;
+						allowCollisions = default_collisions;
 					}
 					if(FlxG.keys.UP) climbing = true;
 				}
@@ -54,7 +56,7 @@ package elements
 			{
 				ladder = false;
 				climbing = false;
-				solid = true;
+				allowCollisions = default_collisions;
 			}
 			
 			if(!ladder) climbing = false;
@@ -63,7 +65,7 @@ package elements
 			}else
 			{
 				acceleration.y = 420;
-				solid = true;
+				allowCollisions = default_collisions;
 			}
 			super.update();
 		}
@@ -75,7 +77,7 @@ package elements
 			
 			if(FlxG.keys.UP && climbing)
 			{
-				allowCollisions = FlxObject.DOWN;
+				allowCollisions = default_collisions;
 			}
 			if(climbing) x = Ladder.x - 2;
 		}
