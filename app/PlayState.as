@@ -50,10 +50,10 @@ package
 			//FlxG.overlap(barrels, mikey, touch_barrel);
 			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
-			FlxG.overlap(level.stairs, barrels, handle_stairs);
+			FlxG.collide(level.stairs, barrels);
 			
 			FlxG.overlap(level.ladders,mikey,handle_ladders);
-			FlxG.overlap(level.ladders, barrels, handle_barrel_ladders);
+			FlxG.overlap(level.ladder_checks, barrels, handle_barrel_ladders);
 			FlxG.collide(level.bricks, mikey)
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
 			
@@ -87,9 +87,12 @@ package
 			//FlxCollision.pixelPerfectCheck(player, spikes)
 			if(Target.isTouching(FlxObject.FLOOR))
 			{
-				if(Target.y + Target.height > Brick.y && Target.y < Brick.y) Target.y = Brick.y - Target.height;
-				else if(Target.y + Target.height < Brick.y && Target.y < Brick.y)
+				if(Target.y + Target.height > Brick.y && Target.y < Brick.y)
+				{
 					Target.y = Brick.y - Target.height;
+				}
+				//else if(Target.y + Target.height < Brick.y && Target.y < Brick.y)
+				//	Target.y = Brick.y - Target.height;
 			}
 			if(Target == mikey)
 			{
@@ -102,15 +105,14 @@ package
 		
 		public function handle_barrel_ladders(ladder:FlxSprite, barrel:FlxSprite):void
 		{
-			if(barrel.y + (barrel.height*.5) > ladder.y) return;
-			if(Barrel(barrel).ladder) return;
-			
-			//if(barrel.x < ladder.x + 2 || barrel.x > ladder.x + 10) return;
+			if(barrel.y + barrel.height > ladder.y + ladder.height) return;
+			if(barrel.x < ladder.x - 3 || barrel.x >= ladder.x -2 ) return;
+			if(Barrel(barrel).ladder > -1) return;
 			var chance:Number = FlxG.random()*10;
-			if(chance > 3)
+			if(chance > 7)
 			{
 				//TODO: Perform some mikey position/facing checks for better AI
-				Barrel(barrel).down_ladder(ladder.y + 8);
+				Barrel(barrel).ladder = ladder.y + 16;
 			}
 		}
 		

@@ -7,7 +7,7 @@ package levels
 		public var stairs:FlxGroup;
 		
 		[Embed(source="../../assets/brick.png")] private var ImgBrick:Class;
-		[Embed(source="../../assets/ladder.png")] private var ImgLadder:Class;		
+		[Embed(source="../../assets/ladder.png")] private var ImgLadder:Class;
 		
 		public function Level1():void
 		{
@@ -94,6 +94,9 @@ package levels
 			ladder.loadTiles(ImgLadder,8,8,0);
 			ladders.add(ladder);
 			ladder.frameHeight = height;
+			var hit_area:FlxSprite = new FlxSprite(X,Y - 8);
+			hit_area.makeGraphic(8,8,0xffffffff);
+			ladder_checks.add(hit_area);
 		}
 	}
 }
