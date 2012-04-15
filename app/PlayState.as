@@ -57,7 +57,6 @@ package
 			FlxG.collide(level.bricks, mikey)
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
 			
-			
 			/*if(mikey.y > FlxG.height)
 			{
 				FlxG.score = 1;	//sets status.text to "Aww, you died!"
@@ -84,16 +83,8 @@ package
 		
 		public function handle_stairs(Brick:FlxSprite, Target:FlxSprite):void
 		{
-			//FlxCollision.pixelPerfectCheck(player, spikes)
 			if(Target.isTouching(FlxObject.FLOOR))
-			{
-				if(Target.y + Target.height > Brick.y && Target.y < Brick.y)
-				{
-					Target.y = Brick.y - Target.height;
-				}
-				//else if(Target.y + Target.height < Brick.y && Target.y < Brick.y)
-				//	Target.y = Brick.y - Target.height;
-			}
+				if(Target.y + Target.height > Brick.y && Target.y < Brick.y) Target.y = Brick.y - Target.height;
 			if(Target == mikey)
 			{
 				if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == mikey.default_collisions)
