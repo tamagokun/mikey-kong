@@ -50,7 +50,7 @@ package
 			//FlxG.overlap(barrels, mikey, touch_barrel);
 			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
-			FlxG.collide(level.stairs, barrels);
+			FlxG.overlap(level.stairs, barrels, handle_stairs);
 			
 			FlxG.overlap(level.ladders,mikey,handle_ladders);
 			FlxG.overlap(level.ladders, barrels, handle_barrel_ladders);
@@ -82,13 +82,22 @@ package
 			}
 		}
 		
-		public function handle_stairs(Brick:FlxSprite, Mikey:FlxSprite):void
+		public function handle_stairs(Brick:FlxSprite, Target:FlxSprite):void
 		{
-			if(mikey.isTouching(FlxObject.FLOOR))
-				if(mikey.y + mikey.height > Brick.y && mikey.y < Brick.y) mikey.y = Brick.y - mikey.height;
-			if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == mikey.default_collisions)
-				mikey.climbing = false;
-			if(!mikey.climbing) FlxObject.separateY(Brick,mikey);
+			//FlxCollision.pixelPerfectCheck(player, spikes)
+			if(Target.isTouching(FlxObject.FLOOR))
+			{
+				if(Target.y + Target.height > Brick.y && Target.y < Brick.y) Target.y = Brick.y - Target.height;
+				else if(Target.y + Target.height < Brick.y && Target.y < Brick.y)
+					Target.y = Brick.y - Target.height;
+			}
+			if(Target == mikey)
+			{
+				if(mikey.y + mikey.height >= Brick.y && mikey.y + mikey.height < Brick.y + (Brick.height*.5) && mikey.allowCollisions == mikey.default_collisions)
+					mikey.climbing = false;
+				if(!mikey.climbing) FlxObject.separateY(Brick,mikey);
+			}else
+				FlxObject.separateY(Brick,Target)
 		}
 		
 		public function handle_barrel_ladders(ladder:FlxSprite, barrel:FlxSprite):void
