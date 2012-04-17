@@ -8,7 +8,6 @@ package elements
 		private var _speed:uint = 30;
 		
 		[Embed(source="../../assets/barrel-roll.gif")] private var ImgBarrel:Class;
-		[Embed(source="../../assets/barrel-ladder.gif")] private var ImgBarrelLadder:Class;
 		
 		public function Barrel(X:int,Y:int):void
 		{
