@@ -71,9 +71,11 @@ package
 			{
 				mikey.ladder = true;
 				mikey.climbing = true;
+				mikey.play("ladder-top-down");
 			}
 			if(FlxG.keys.DOWN && mikey.climbing)
 			{
+				if(mikey.finished) mikey.play("ladder-climbing");
 				if(mikey.y + (mikey.height*.5) > Ladder.y)
 					mikey.allowCollisions = mikey.default_collisions;
 				else
