@@ -5,21 +5,21 @@ package elements
 	public class Barrel extends FlxSprite
 	{
 		public var ladder:int = -1;
-		private var _speed:uint = 30;
+		private var _speed:uint = 45;
 		
 		[Embed(source="../../assets/barrel-roll.gif")] private var ImgBarrel:Class;
 		
 		public function Barrel(X:int,Y:int):void
 		{
 			super(X,Y);
-			loadGraphic(ImgBarrel,true,false,15,10);
+			loadGraphic(ImgBarrel,true,false,15,14);
 			
 			addAnimation("Roll",[0,1,2,3],6+FlxG.random()*4);
 			addAnimation("Ladder",[4,5],6+FlxG.random()*4);
 			
 			play("Roll");
 			
-			elasticity = 0.25;
+			elasticity = 0.35;
 			acceleration.y = 420;
 			right();
 		}
@@ -39,7 +39,7 @@ package elements
 		override public function update():void
 		{
 			if(x >= 224) left();
-			if(x <= 8) right();
+			if(x <= 5) right();
 			
 			if(ladder > -1)
 			{
@@ -63,7 +63,7 @@ package elements
 					}
 				}
 			}
-			if( x <= 8 && y >= 230) kill();
+			if( x <= 8 && y >= 230 || y > FlxG.height) kill();
 			super.update();
 		}
 	}

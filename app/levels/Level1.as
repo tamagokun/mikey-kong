@@ -76,6 +76,7 @@ package levels
 				{
 					var brick:FlxSprite = place_item(X+x_offset,Y+y_offset,ImgBrick,stairs);
 					brick.immovable = true;
+					brick.allowCollisions = FlxObject.UP;
 					x_offset += right? brick.width : -brick.width;
 				}
 				y_offset -= 1;

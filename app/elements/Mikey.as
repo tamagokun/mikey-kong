@@ -21,7 +21,8 @@ package elements
 			default_collisions = DOWN;
 			
 			x = 50;
-			width = 12;
+			width = 10;
+			offset.x = 3;
 			
 			addAnimation("standing",[0],0);
 			addAnimation("jumping",[1],0);
@@ -31,22 +32,18 @@ package elements
 			addAnimation("ladder-top-down",[7,6,5],6+FlxG.random()*2,false);
 			addAnimation("hammer",[9,10],6+FlxG.random()*4,false);
 			
-			var run_speed:uint = 40;
+			var run_speed:uint = 45;
 			drag.x = run_speed * 8;
 			acceleration.y = 420;
 			maxVelocity.x = run_speed;
-			maxVelocity.y = 200;
+			maxVelocity.y = 115;
 		}
 		
 		override public function postUpdate():void
 		{
 			if(climbing)
 			{
-				if(velocity.y != 0)
-				{
-					//dirty = false;
-					super.postUpdate();
-				}
+				if(velocity.y != 0) super.postUpdate();
 			}else
 				super.postUpdate();
 		}
@@ -66,7 +63,7 @@ package elements
 			}
 			
 			if(FlxG.keys.justPressed("SPACE") && isTouching(FlxObject.FLOOR))
-				velocity.y = -maxVelocity.y/2;
+				velocity.y = -maxVelocity.y;
 			
 			if(FlxG.keys.UP && climbing) velocity.y = -_climb_speed;
 			else if(FlxG.keys.DOWN && climbing) velocity.y = _climb_speed;
@@ -112,7 +109,7 @@ package elements
 				if(y + 6 < Ladder.y) play("ladder-top-up");
 				else play("ladder-climbing");
 			}
-			if(climbing) x = Ladder.x - 7;
+			if(climbing) x = Ladder.x - 4;
 		}
 	}
 }

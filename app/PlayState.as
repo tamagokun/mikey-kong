@@ -47,7 +47,7 @@ package
 		{		
 			super.update();
 			
-			//FlxG.overlap(barrels, mikey, touch_barrel);
+			FlxG.overlap(barrels, mikey, touch_barrel);
 			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
 			FlxG.collide(level.stairs, barrels);
@@ -111,13 +111,24 @@ package
 		
 		public function touch_barrel(Barrel:FlxSprite,Mikey:FlxSprite):void
 		{
-			//Barrel.kill();
-			score.text = "SCORE: "+(barrels.countDead()*100);
-			if(barrels.countLiving() == 0)
+			if(mikey.y + mikey.height <= Barrel.y + 4 )
 			{
+				if(mikey.facing == FlxObject.LEFT && mikey.x <= Barrel.x)
+					Barrel.kill();
+				if(mikey.facing == FlxObject.RIGHT && mikey.x >= Barrel.x)
+					Barrel.kill();	
+			}else
+			{
+				mikey.flicker();
+			}
+			
+			//Barrel.kill();
+			//score.text = "SCORE: "+(barrels.countDead()*100);
+			//if(barrels.countLiving() == 0)
+			//{
 				//status.text = "Blah";
 				//exit.exists = true;
-			}
+			//}
 		}
 		
 		public function win(Exit:FlxSprite,Mikey:FlxSprite):void
