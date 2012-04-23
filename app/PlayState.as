@@ -6,17 +6,26 @@ package
 	
 	public class PlayState extends FlxState
 	{
-		//public var exit:FlxSprite;
 		public var level:*;
 		public var barrels:FlxGroup;
 		public var mikey:Mikey;
-		public var score:FlxText;
-		public var time:FlxText;
+		public var label_score:FlxText;
+		public var label_time:FlxText;
+		public var score:uint = 0;
+		public var time:uint = 0;
+		
+		[Embed(source="../assets/04B_11__.TTF", fontFamily="04B", embedAsCFF="false")]
+		public var Font04B:String;
 		
 		override public function create():void
 		{
+			//gui
+			label_score = new FlxText(17,8,63,"000000");
+			label_score.setFormat("04B",8,0xffffff,"left");
+			add(label_score);
+			
 			//level init stuff
-			level = new Level1() as Level1;
+			level = new Level1(this) as Level1;
 			add(level.ladders);
 			add(level.bricks);
 			if(level.stairs) add(level.stairs);
@@ -43,12 +52,20 @@ package
 			barrels.add(barrel);
 		}
 		
+		public function destroy_barrel(Barrel:FlxSprite):void
+		{
+			Barrel.kill();
+			score += 100;
+			var base:String = "000000";
+			base = base.slice(0,String(score).length);
+			label_score.text = base + String(score);
+		}
+		
 		override public function update():void
 		{		
 			super.update();
 			
 			FlxG.overlap(barrels, mikey, touch_barrel);
-			//FlxG.overlap(exit, mikey, win);
 			FlxG.collide(level.bricks, barrels);
 			FlxG.collide(level.stairs, barrels);
 			
@@ -56,6 +73,12 @@ package
 			FlxG.overlap(level.ladder_checks, barrels, handle_barrel_ladders);
 			FlxG.collide(level.bricks, mikey)
 			if(level.stairs) FlxG.overlap(level.stairs, mikey, handle_stairs);
+			
+			if(level.completed())
+			{
+				//stop game.
+				//go to next!
+			}
 			
 			/*if(mikey.y > FlxG.height)
 			{
@@ -114,28 +137,13 @@ package
 			if(mikey.y + mikey.height <= Barrel.y + 4 )
 			{
 				if(mikey.facing == FlxObject.LEFT && mikey.x <= Barrel.x)
-					Barrel.kill();
-				if(mikey.facing == FlxObject.RIGHT && mikey.x >= Barrel.x)
-					Barrel.kill();	
+					destroy_barrel(Barrel);
+				else if(mikey.facing == FlxObject.RIGHT && mikey.x >= Barrel.x)
+					destroy_barrel(Barrel);	
 			}else
 			{
 				mikey.flicker();
 			}
-			
-			//Barrel.kill();
-			//score.text = "SCORE: "+(barrels.countDead()*100);
-			//if(barrels.countLiving() == 0)
-			//{
-				//status.text = "Blah";
-				//exit.exists = true;
-			//}
-		}
-		
-		public function win(Exit:FlxSprite,Mikey:FlxSprite):void
-		{
-			//status.text = "Yay, you won!";
-			score.text = "SCORE: 5000";
-			Mikey.kill();
 		}
 	}
 }

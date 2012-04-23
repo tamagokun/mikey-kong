@@ -9,9 +9,9 @@ package levels
 		[Embed(source="../../assets/brick.png")] private var ImgBrick:Class;
 		[Embed(source="../../assets/ladder.png")] private var ImgLadder:Class;
 		
-		public function Level1():void
+		public function Level1(state:FlxState):void
 		{
-			super();
+			super(state);
 			stairs = new FlxGroup();
 		}
 		
@@ -55,6 +55,11 @@ package levels
 			place_ladder(136,56,28); //winning ladder
 			place_ladder(72,32,52);
 			place_ladder(88,32,52);
+		}
+		
+		override public function completed():Boolean
+		{
+			return (state.mikey.x <= 144 && state.mikey.x >= 136 && state.mikey.y < 48);
 		}
 		
 		public function create_row(X:uint,Y:uint,count:uint):void
