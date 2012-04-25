@@ -11,7 +11,7 @@ package elements
 
 		private var _parent:PlayState;
 		
-		[Embed(source="../../assets/jumpman.gif")] private var ImgMikey:Class;
+		[Embed(source="../../assets/mikey.gif")] private var ImgMikey:Class;
 		
 		public function Mikey(parent:PlayState):void
 		{
