@@ -7,6 +7,7 @@ package
 	public class PlayState extends FlxState
 	{
 		public var level:*;
+		public var lives:FlxGroup;
 		public var barrels:FlxGroup;
 		public var mikey:Mikey;
 		public var score:uint = 0;
@@ -19,16 +20,23 @@ package
 		protected var high_score:FlxText;
 		protected var label_level:FlxText;
 		protected var label_bonus:FlxText;
+		protected var graphic_bonus:FlxSprite;
 		
 		[Embed(source="../assets/04B_11__.TTF", fontFamily="04B", embedAsCFF="false")]
 		public var Font04B:String;
 		[Embed(source="../assets/PressStart2P.ttf", fontFamily="2P", embedAsCFF="false")]
 		public var Font2P:String;
 		
+		[Embed(source="../assets/bonus-box.gif")] private var ImgBonus:Class;
+		[Embed(source="../assets/lives.gif")] private var ImgLife:Class;
+		
 		override public function create():void
 		{
 			//gui
+			lives = new FlxGroup();
+			add(lives);
 			setup_labels();
+			update_lives(4);
 			
 			//level init stuff
 			level = new Level1(this) as Level1;
@@ -152,6 +160,17 @@ package
 			}
 		}
 		
+		public function update_lives(amount:int):void
+		{
+			lives.clear();
+			var i:uint = 0;
+			for(i; i < amount; i++)
+			{
+				var life:FlxSprite = new FlxSprite(17+(i*8),24,ImgLife);
+				lives.add(life);
+			}
+		}
+		
 		protected function setup_labels():void
 		{
 			label_score = new FlxText(17,8,63,"000000");
@@ -173,6 +192,13 @@ package
 			label_level = new FlxText(178,24,50,"L=00");
 			label_level.setFormat("2P",8,0x0000aa,"left");
 			add(label_level);
+			
+			graphic_bonus = new FlxSprite(179,40,ImgBonus);
+			add(graphic_bonus);
+			
+			label_bonus = new FlxText(183,46,50,"4200");
+			label_bonus.setFormat("2P",8,0x00ffff,"left");
+			add(label_bonus);
 		}
 	}
 }
