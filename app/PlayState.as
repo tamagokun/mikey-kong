@@ -45,17 +45,16 @@ package
 			add(level.bricks);
 			if(level.stairs) add(level.stairs);
 			level.create();
-			
-			//create mikey!
-			mikey = new Mikey(this);
-			add(mikey);
+			barrels = new FlxGroup();
+			add(barrels);
 			
 			//create dk! oh noes!
 			dk = new Kong(this);
 			add(dk);
 			
-			barrels = new FlxGroup();
-			add(barrels);
+			//create mikey!
+			mikey = new Mikey(this);
+			add(mikey);
 		}
 		
 		public function create_barrel(X:uint,Y:uint):void
