@@ -10,6 +10,7 @@ package
 		public var lives:FlxGroup;
 		public var barrels:FlxGroup;
 		public var mikey:Mikey;
+		public var dk:Kong;
 		public var score:uint = 0;
 		public var time:uint = 0;
 		
@@ -49,15 +50,12 @@ package
 			mikey = new Mikey(this);
 			add(mikey);
 			
+			//create dk! oh noes!
+			dk = new Kong(this);
+			add(dk);
+			
 			barrels = new FlxGroup();
 			add(barrels);
-			var barrel_timer:FlxTimer = new FlxTimer();
-			barrel_timer.start(5,0,dk_throw);
-		}
-		
-		public function dk_throw(Timer:FlxTimer):void
-		{
-			create_barrel(0,0);
 		}
 		
 		public function create_barrel(X:uint,Y:uint):void
