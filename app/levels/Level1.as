@@ -8,6 +8,7 @@ package levels
 		
 		[Embed(source="../../assets/brick.png")] private var ImgBrick:Class;
 		[Embed(source="../../assets/ladder.png")] private var ImgLadder:Class;
+		[Embed(source="../../assets/barrel-hoarde.gif")] private var ImgBarrelHoarde:Class;
 		
 		public function Level1(state:FlxState):void
 		{
@@ -55,6 +56,9 @@ package levels
 			place_ladder(136,56,28); //winning ladder
 			place_ladder(72,32,52);
 			place_ladder(88,32,52);
+			
+			//barrel hoarde
+			place_item(8,52,ImgBarrelHoarde,state);
 		}
 		
 		override public function completed():Boolean

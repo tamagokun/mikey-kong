@@ -15,12 +15,11 @@ package elements
 		
 		public function Mikey(parent:PlayState):void
 		{
-			super(0,0);
+			super(31,228);
 			loadGraphic(ImgMikey,true,true,22,16);
 			_parent = parent;
 			default_collisions = DOWN;
 			
-			x = 50;
 			width = 10;
 			offset.x = 3;
 			

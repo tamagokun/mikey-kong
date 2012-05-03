@@ -65,11 +65,23 @@ package
 		
 		public function destroy_barrel(Barrel:FlxSprite):void
 		{
+			var point:Object = {"x":Barrel.x,"y":Barrel.y};
 			Barrel.kill();
-			score += 100;
+			award_points(100,point);
+		}
+		
+		public function award_points(amount:uint, point:Point = null):void
+		{
+			score += amount;
 			var base:String = "000000";
 			base = base.slice(0,String(score).length);
 			label_score.text = base + String(score);
+			if(point)
+			{
+				var point_label:FlxText = new FlxText(point.x,point.y,50,String(score));
+				point_label.setFormat("2P",8,0xffffff,"center");
+				//kill text after a couple seconds.
+			}
 		}
 		
 		override public function update():void
