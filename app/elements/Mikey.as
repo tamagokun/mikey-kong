@@ -55,6 +55,7 @@ package elements
 			if(lives < 0)
 			{
 				//GAME OVER
+				return;
 			}
 			_parent.reset();
 		}
