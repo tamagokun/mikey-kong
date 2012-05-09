@@ -86,7 +86,7 @@ package
 		{
 			score += amount;
 			var base:String = "000000";
-			base = base.slice(0,String(score).length);
+			base = base.slice(0,base.length - String(score).length);
 			label_score.text = base + String(score);
 			if(point)
 			{
