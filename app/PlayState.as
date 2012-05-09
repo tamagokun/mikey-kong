@@ -112,6 +112,8 @@ package
 			if(level.completed())
 			{
 				//stop game.
+				barrels.clear();
+				dk.stop();
 				//go to next!
 			}
 			

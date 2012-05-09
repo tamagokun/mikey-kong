@@ -63,7 +63,7 @@ package levels
 		
 		override public function completed():Boolean
 		{
-			return (state.mikey.x <= 144 && state.mikey.x >= 136 && state.mikey.y < 48);
+			return (state.mikey.x <= 144 && state.mikey.x >= 130 && state.mikey.y <= 48);
 		}
 		
 		public function create_row(X:uint,Y:uint,count:uint):void

@@ -5,6 +5,7 @@ package elements
 	public class Kong extends FlxSprite
 	{
 		private var _parent:PlayState;
+		private var barrel_timer:FlxTimer;
 		
 		[Embed(source="../../assets/kong.gif")] private var ImgKong:Class;
 		
@@ -18,12 +19,17 @@ package elements
 			addAnimation("throw_left",[8,8],4,false);
 			addAnimation("throw_right",[9,9],4,false);
 			
-			var barrel_timer:FlxTimer = new FlxTimer();
+			barrel_timer = new FlxTimer();
 			barrel_timer.start(4,0,dk_throw);
 			
 			play("standing");
 		}
-				
+		
+		public function stop():void
+		{
+			barrel_timer.stop();
+		}
+		
 		public function dk_throw(Timer:FlxTimer):void
 		{
 		 	play(facing == LEFT? "throw_left" : "throw_right");
