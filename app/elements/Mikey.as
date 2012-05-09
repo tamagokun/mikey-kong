@@ -4,6 +4,7 @@ package elements
 	
 	public class Mikey extends FlxSprite
 	{
+		public var lives:uint = 0;
 		public var ladder:Boolean = false;
 		public var climbing:Boolean = false;
 		public var default_collisions:int = 0;
@@ -45,6 +46,17 @@ package elements
 				if(velocity.y != 0) super.postUpdate();
 			}else
 				super.postUpdate();
+		}
+		
+		override public function kill():void
+		{
+			super.kill();
+			lives--;
+			if(lives < 0)
+			{
+				//GAME OVER
+			}
+			_parent.reset();
 		}
 		
 		override public function update():void

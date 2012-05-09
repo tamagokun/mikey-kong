@@ -19,7 +19,7 @@ package elements
 			addAnimation("throw_right",[9,9],4,false);
 			
 			var barrel_timer:FlxTimer = new FlxTimer();
-			barrel_timer.start(5,0,dk_throw);
+			barrel_timer.start(4,0,dk_throw);
 			
 			play("standing");
 		}

@@ -1,6 +1,7 @@
 package
 {
 	import org.flixel.*;
+	import org.flixel.plugin.photonstorm.FlxCollision;
 	import elements.*;
 	import levels.*;
 	
@@ -37,7 +38,6 @@ package
 			lives = new FlxGroup();
 			add(lives);
 			setup_labels();
-			update_lives(4);
 			
 			//level init stuff
 			level = new Level1(this) as Level1;
@@ -54,7 +54,19 @@ package
 			
 			//create mikey!
 			mikey = new Mikey(this);
+			mikey.lives = 4;
 			add(mikey);
+			
+			update_lives(mikey.lives);
+		}
+		
+		public function reset():void
+		{
+			barrels.clear();
+			dk.kill();
+			dk.revive();
+			mikey.reset(31,228);
+			update_lives(mikey.lives);
 		}
 		
 		public function create_barrel(X:uint,Y:uint):void
@@ -70,7 +82,7 @@ package
 			award_points(100,point);
 		}
 		
-		public function award_points(amount:uint, point:Point = null):void
+		public function award_points(amount:uint, point:Object = null):void
 		{
 			score += amount;
 			var base:String = "000000";
@@ -103,12 +115,7 @@ package
 				//go to next!
 			}
 			
-			/*if(mikey.y > FlxG.height)
-			{
-				FlxG.score = 1;	//sets status.text to "Aww, you died!"
-				FlxG.resetState();
-				
-			}*/
+			if(mikey.y > FlxG.height) mikey.kill();
 		}
 		
 		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
@@ -165,7 +172,8 @@ package
 					destroy_barrel(Barrel);	
 			}else
 			{
-				mikey.flicker();
+				if(FlxCollision.pixelPerfectCheck(Barrel,Mikey))
+					mikey.kill();
 			}
 		}
 		

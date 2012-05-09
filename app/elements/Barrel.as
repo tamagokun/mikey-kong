@@ -5,7 +5,7 @@ package elements
 	public class Barrel extends FlxSprite
 	{
 		public var ladder:int = -1;
-		private var _speed:uint = 45;
+		private var _speed:uint = 55;
 		
 		[Embed(source="../../assets/barrel-roll.gif")] private var ImgBarrel:Class;
 		
