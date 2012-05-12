@@ -42,9 +42,9 @@ package elements
 			
 			var run_speed:uint = 45;
 			drag.x = run_speed * 8;
-			acceleration.y = 420;
+			acceleration.y = 350;
 			maxVelocity.x = run_speed;
-			maxVelocity.y = 115;
+			maxVelocity.y = 100;
 		}
 		
 		override public function postUpdate():void
@@ -121,7 +121,7 @@ package elements
 				acceleration.y = 0;
 			}else
 			{
-				acceleration.y = 420;
+				acceleration.y = 350;
 				allowCollisions = default_collisions;
 			}
 			super.update();

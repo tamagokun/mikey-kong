@@ -11,7 +11,7 @@ package elements
 		
 		public function Kong(parent:PlayState):void
 		{
-			super(31,48);
+			super(29,48);
 			loadGraphic(ImgKong,true,true,52,36);
 			_parent = parent;
 			
