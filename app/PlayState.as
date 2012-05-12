@@ -122,6 +122,7 @@ package
 		
 		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
 		{
+			if(mikey.jumping) return;
 			if(!mikey.ladder && FlxG.keys.DOWN)
 			{
 				mikey.ladder = true;
@@ -168,6 +169,7 @@ package
 		{
 			if(mikey.y + mikey.height <= Barrel.y + 4 )
 			{
+				if(mikey.climbing) return;
 				if(mikey.facing == FlxObject.LEFT && mikey.x <= Barrel.x)
 					destroy_barrel(Barrel);
 				else if(mikey.facing == FlxObject.RIGHT && mikey.x >= Barrel.x)

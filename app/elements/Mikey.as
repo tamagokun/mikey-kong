@@ -5,6 +5,7 @@ package elements
 	public class Mikey extends FlxSprite
 	{
 		public var lives:uint = 0;
+		public var jumping:Boolean = false;
 		public var ladder:Boolean = false;
 		public var climbing:Boolean = false;
 		public var default_collisions:int = 0;
@@ -71,11 +72,17 @@ package elements
 			if(!climbing)
 			{
 				if(velocity.y != 0) play("jumping");
-				else play(velocity.x != 0? "walking" : "standing");
+				else{
+					play(velocity.x != 0? "walking" : "standing");
+					jumping = false;
+				}
 			}
 			
 			if(FlxG.keys.justPressed("SPACE") && isTouching(FlxObject.FLOOR))
+			{
 				velocity.y = -maxVelocity.y;
+				jumping = true;	
+			}
 			
 			if(FlxG.keys.UP && climbing) velocity.y = -_climb_speed;
 			else if(FlxG.keys.DOWN && climbing) velocity.y = _climb_speed;
@@ -112,6 +119,7 @@ package elements
 		
 		public function handle_ladders(Ladder:FlxSprite, Mikey:FlxSprite):void
 		{
+			if(jumping) return;
 			if(x + (width*.5) > Ladder.x && x + (width*.5) < Ladder.x + Ladder.width)
 				ladder = true;
 			
