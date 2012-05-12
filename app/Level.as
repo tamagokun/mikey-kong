@@ -7,6 +7,7 @@ package
 		public var bricks:FlxGroup;
 		public var ladders:FlxGroup;
 		public var ladder_checks:FlxGroup;
+		public var bgm:FlxSound;
 		
 		protected var state:PlayState;
 		

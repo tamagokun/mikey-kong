@@ -31,6 +31,8 @@ package
 		
 		[Embed(source="../assets/bonus-box.gif")] private var ImgBonus:Class;
 		[Embed(source="../assets/lives.gif")] private var ImgLife:Class;
+		[Embed(source="../assets/audio/bacmusic.mp3")] private var SndLevel:Class;
+		[Embed(source="../assets/audio/complete.mp3")] private var SndWin:Class;
 		
 		override public function create():void
 		{
@@ -58,6 +60,8 @@ package
 			add(mikey);
 			
 			update_lives(mikey.lives);
+			
+			level.bgm = FlxG.loadSound(SndLevel,1,true,true,true);
 		}
 		
 		public function reset():void
@@ -67,6 +71,7 @@ package
 			dk.revive();
 			mikey.reset(31,228);
 			update_lives(mikey.lives);
+			active = true;
 		}
 		
 		public function create_barrel(X:uint,Y:uint):void
@@ -97,7 +102,8 @@ package
 		}
 		
 		override public function update():void
-		{		
+		{
+			if(!active) return;
 			super.update();
 			
 			FlxG.overlap(barrels, mikey, touch_barrel);
@@ -112,8 +118,12 @@ package
 			if(level.completed())
 			{
 				//stop game.
+				active = false;
 				barrels.clear();
 				dk.stop();
+				level.bgm.stop();
+				//you win!
+				FlxG.play(SndWin,1,false,true);
 				//go to next!
 			}
 			

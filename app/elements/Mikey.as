@@ -10,10 +10,14 @@ package elements
 		public var climbing:Boolean = false;
 		public var default_collisions:int = 0;
 		private var _climb_speed:uint = 20;
+		private var _walk_sfx:FlxSound;
+		private var _jump_sfx:FlxSound;
 
 		private var _parent:PlayState;
 		
 		[Embed(source="../../assets/mikey.gif")] private var ImgMikey:Class;
+		[Embed(source="../../assets/audio/jump.mp3")] private var SndJump:Class;
+		[Embed(source="../../assets/audio/walking.mp3")] private var SndWalk:Class;
 		
 		public function Mikey(parent:PlayState):void
 		{
@@ -32,6 +36,9 @@ package elements
 			addAnimation("ladder-top-up",[5,6,7],6+FlxG.random()*2,false);
 			addAnimation("ladder-top-down",[7,6,5],6+FlxG.random()*2,false);
 			addAnimation("hammer",[9,10],6+FlxG.random()*4,false);
+			
+			_walk_sfx = FlxG.loadSound(SndWalk,1,true);
+			_jump_sfx = FlxG.loadSound(SndJump,1,false);
 			
 			var run_speed:uint = 45;
 			drag.x = run_speed * 8;
@@ -68,7 +75,8 @@ package elements
 			{
 				acceleration.x = FlxG.keys.LEFT? -maxVelocity.x*4 : maxVelocity.x*4;
 				facing = FlxG.keys.LEFT? LEFT : RIGHT;
-			}
+				if(!jumping) _walk_sfx.play();
+			}else _walk_sfx.stop();
 			if(!climbing)
 			{
 				if(velocity.y != 0) play("jumping");
@@ -81,7 +89,9 @@ package elements
 			if(FlxG.keys.justPressed("SPACE") && isTouching(FlxObject.FLOOR))
 			{
 				velocity.y = -maxVelocity.y;
-				jumping = true;	
+				jumping = true;
+				_walk_sfx.stop();
+				_jump_sfx.play(true);
 			}
 			
 			if(FlxG.keys.UP && climbing) velocity.y = -_climb_speed;
