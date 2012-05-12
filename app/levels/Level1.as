@@ -7,7 +7,7 @@ package levels
 		public var stairs:FlxGroup;
 		
 		[Embed(source="../../assets/brick.png")] private var ImgBrick:Class;
-		[Embed(source="../../assets/ladder.png")] private var ImgLadder:Class;
+		[Embed(source="../../assets/ladder.gif")] private var ImgLadder:Class;
 		[Embed(source="../../assets/barrel-hoarde.gif")] private var ImgBarrelHoarde:Class;
 		
 		public function Level1(state:FlxState):void
@@ -101,7 +101,7 @@ package levels
 		public function place_ladder(X:int,Y:int,height:int):void
 		{
 			var ladder:FlxTileblock = new FlxTileblock(X,Y,8,height);
-			ladder.loadTiles(ImgLadder,8,8,0);
+			ladder.loadTiles(ImgLadder,8,4,0);
 			ladders.add(ladder);
 			ladder.frameHeight = height;
 			var hit_area:FlxSprite = new FlxSprite(X,Y - 8);
