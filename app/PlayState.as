@@ -47,12 +47,13 @@ package
 			add(level.bricks);
 			if(level.stairs) add(level.stairs);
 			level.create();
-			barrels = new FlxGroup();
-			add(barrels);
 			
 			//create dk! oh noes!
 			dk = new Kong(this);
 			add(dk);
+			
+			barrels = new FlxGroup();
+			add(barrels);
 			
 			//create mikey!
 			mikey = new Mikey(this);

@@ -16,11 +16,12 @@ package elements
 			_parent = parent;
 			
 			addAnimation("standing",[0],0);
-			addAnimation("throw_left",[8,8],4,false);
-			addAnimation("throw_right",[9,9],4,false);
+			addAnimation("pickup_barrel",[8,8],4,false);
+			addAnimation("hold_barrel",[11,11],4,false);
+			addAnimation("throw",[9,9],4,false);
 			
 			barrel_timer = new FlxTimer();
-			barrel_timer.start(4,0,dk_throw);
+			barrel_timer.start(4,0,find_barrel);
 			
 			play("standing");
 		}
@@ -30,16 +31,24 @@ package elements
 			barrel_timer.stop();
 		}
 		
-		public function dk_throw(Timer:FlxTimer):void
+		public function find_barrel(Timer:FlxTimer):void
 		{
-		 	play(facing == LEFT? "throw_left" : "throw_right");
-			var x_start:uint = facing == LEFT? x + 3 : x + 43;
-			_parent.create_barrel(x_start,67);
+			play("pickup_barrel");
+		}
+		
+		public function dk_throw():void
+		{
+			play("throw");
+			_parent.create_barrel(x + 43,67);
 		}
 		
 		override public function update():void
 		{
-			if(finished && (_curAnim.name == "throw_left" || _curAnim.name == "throw_right"))
+			if(finished && _curAnim.name == "pickup_barrel")
+				play("hold_barrel");
+			if(finished && _curAnim.name == "hold_barrel")
+				dk_throw();
+			if(finished && _curAnim.name == "throw")
 				play("standing");
 		}
 	}
