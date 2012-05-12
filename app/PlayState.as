@@ -13,6 +13,7 @@ package
 		public var mikey:Mikey;
 		public var dk:Kong;
 		public var score:uint = 0;
+		public var bonus:uint = 4200;
 		public var time:uint = 0;
 		
 		protected var label_score:FlxText;
@@ -23,6 +24,7 @@ package
 		protected var label_level:FlxText;
 		protected var label_bonus:FlxText;
 		protected var graphic_bonus:FlxSprite;
+		protected var bonus_timer:FlxTimer;
 		
 		[Embed(source="../assets/04B_11__.TTF", fontFamily="04B", embedAsCFF="false")]
 		public var Font04B:String;
@@ -62,6 +64,9 @@ package
 			
 			update_lives(mikey.lives);
 			
+			bonus_timer = new FlxTimer();
+			bonus_timer.start(2.5,0,decrease_bonus);
+			
 			level.bgm = FlxG.loadSound(SndLevel,1,true,true,true);
 		}
 		
@@ -72,6 +77,8 @@ package
 			dk.revive();
 			mikey.reset(31,228);
 			update_lives(mikey.lives);
+			bonus = 4200;
+			bonus_timer.start(2.5,0,decrease_bonus);
 			active = true;
 		}
 		
@@ -102,6 +109,15 @@ package
 			}
 		}
 		
+		public function decrease_bonus(Timer:FlxTimer):void
+		{
+			bonus -= 100;
+			if(bonus < 0) bonus = 0;
+			var base:String = "0000";
+			base = base.slice(0,base.length - String(bonus).length);
+			label_bonus.text = base + String(bonus);
+		}
+		
 		override public function update():void
 		{
 			if(!active) return;
@@ -121,6 +137,7 @@ package
 				//stop game.
 				active = false;
 				barrels.clear();
+				bonus_timer.stop();
 				dk.stop();
 				level.bgm.stop();
 				//you win!
