@@ -8,6 +8,7 @@ package
 		public var stairs:FlxGroup;
 		public var bricks:FlxGroup;
 		public var ladders:FlxGroup;
+		public var kong:Kong;
 		
 		[Embed(source="../assets/brick.png")] private var ImgBrick:Class;
 		[Embed(source="../assets/ladder.gif")] private var ImgLadder:Class;
@@ -47,8 +48,58 @@ package
 			
 			place_ladder(136,56,28); //winning ladder
 			
-			place_ladder(120,92,148);
+			place_ladder(119,92,148);
 			place_ladder(136,92,148);
+			
+			kong = new Kong();
+			add(kong);
+			kong.y = 200;
+			kong.x = 108;
+			kong.velocity.y = -32;
+			kong.play("climb");
+		}
+		
+		override public function update():void
+		{
+			super.update();
+			
+			if(kong.bouncing)
+			{
+				if(kong.y > 49)
+				{
+					kong.y = 49;
+					kong.velocity.x = 0;
+					kong.velocity.y = 0;
+					if(kong.x > 29) dk_bounce(45,100);
+				}
+			}
+			
+			if(kong.y <= 84 && kong.acceleration.y == 0 && !kong.bouncing)
+			{
+				kong.velocity.y = 0;
+				kong.acceleration.x = 0;
+				kong.acceleration.y = 350;
+				kong.maxVelocity.y = 150;
+				kong.velocity.y = -kong.maxVelocity.y;
+			}
+			
+			if(kong.y > 49 && !kong.bouncing && kong.velocity.y > 0)
+			{
+				kong.play("standing");
+				//place manda on da bricks
+				dk_bounce(45,100);
+			}
+		}
+		
+		public function dk_bounce(X:int,Y:int):void
+		{
+			kong.bouncing = true;
+			kong.acceleration.x = 0;
+			kong.acceleration.y = 350;
+			kong.maxVelocity.x = X;
+			kong.maxVelocity.y = Y;
+			kong.velocity.x = -kong.maxVelocity.x;
+			kong.velocity.y = -kong.maxVelocity.y;
 		}
 		
 		public function create_row(X:uint,Y:uint,count:uint):void

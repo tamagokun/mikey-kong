@@ -8,7 +8,7 @@ package
 	{
 		public function MikeyKong():void
 		{
-			super(256,264,PlayState,2);
+			super(256,264,IntroState,2);
 			forceDebugger = true;
 		}
 	}

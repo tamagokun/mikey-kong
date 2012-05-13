@@ -4,12 +4,13 @@ package elements
 	
 	public class Kong extends FlxSprite
 	{
+		public var bouncing:Boolean = false;
 		private var _parent:PlayState;
 		private var barrel_timer:FlxTimer;
 		
 		[Embed(source="../../assets/kong.gif")] private var ImgKong:Class;
 		
-		public function Kong(parent:PlayState):void
+		public function Kong(parent:PlayState = null):void
 		{
 			super(29,48);
 			loadGraphic(ImgKong,true,true,52,36);
@@ -19,9 +20,13 @@ package elements
 			addAnimation("pickup_barrel",[8,8],4,false);
 			addAnimation("hold_barrel",[11,11],4,false);
 			addAnimation("throw",[9,9],4,false);
+			addAnimation("climb",[4,5],8,true);
 			
-			barrel_timer = new FlxTimer();
-			barrel_timer.start(4,0,find_barrel);
+			if(_parent !== null)
+			{
+				barrel_timer = new FlxTimer();
+				barrel_timer.start(4,0,find_barrel);
+			}
 			
 			play("standing");
 		}
