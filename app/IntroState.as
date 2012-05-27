@@ -10,6 +10,9 @@ package
 		public var ladders:FlxGroup;
 		public var kong:Kong;
 		
+		private var ladder_1:FlxTileblock;
+		private var ladder_2:FlxTileblock;
+
 		[Embed(source="../assets/brick.png")] private var ImgBrick:Class;
 		[Embed(source="../assets/ladder.gif")] private var ImgLadder:Class;
 		
@@ -48,8 +51,8 @@ package
 			
 			place_ladder(136,56,28); //winning ladder
 			
-			place_ladder(119,92,148);
-			place_ladder(136,92,148);
+			ladder_1 = place_ladder(119,92,148);
+			ladder_2 = place_ladder(136,92,148);
 			
 			kong = new Kong();
 			add(kong);
@@ -62,7 +65,7 @@ package
 		override public function update():void
 		{
 			super.update();
-			
+
 			if(kong.bouncing)
 			{
 				if(kong.y > 49)
@@ -70,7 +73,7 @@ package
 					kong.y = 49;
 					kong.velocity.x = 0;
 					kong.velocity.y = 0;
-					if(kong.x > 29) dk_bounce(45,100);
+					if(kong.x > 39) dk_bounce(45,75);
 				}
 			}
 			
@@ -81,6 +84,8 @@ package
 				kong.acceleration.y = 350;
 				kong.maxVelocity.y = 150;
 				kong.velocity.y = -kong.maxVelocity.y;
+				ladders.remove(ladder_1);
+				ladders.remove(ladder_2);
 			}
 			
 			if(kong.y > 49 && !kong.bouncing && kong.velocity.y > 0)
@@ -89,6 +94,18 @@ package
 				//place manda on da bricks
 				dk_bounce(45,100);
 			}
+			
+			if(ladder_1 && ladder_1.height > 32)
+			{
+				if(ladder_1.y + ladder_1.height > kong.y + kong.height + 20 && !kong.bouncing)
+				{
+					ladder_1.height = Math.max(0,ladder_1.height - 8);
+					ladder_2.height = Math.max(0,ladder_2.height - 8);
+					ladder_1.loadTiles(ImgLadder,8,4,0);
+					ladder_2.loadTiles(ImgLadder,8,4,0);
+				}
+			}
+
 		}
 		
 		public function dk_bounce(X:int,Y:int):void
@@ -127,12 +144,12 @@ package
 			}
 		}
 		
-		public function place_ladder(X:int,Y:int,height:int):void
+		public function place_ladder(X:int,Y:int,height:int):FlxTileblock
 		{
 			var ladder:FlxTileblock = new FlxTileblock(X,Y,8,height);
 			ladder.loadTiles(ImgLadder,8,4,0);
 			ladders.add(ladder);
-			ladder.frameHeight = height;
+			return ladder;
 		}
 		
 		public function place_brick(X:int,Y:int):void
