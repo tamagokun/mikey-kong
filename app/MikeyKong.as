@@ -11,5 +11,17 @@ package
 			super(256,264,IntroState,2);
 			forceDebugger = true;
 		}
+
+		override protected function onFocus(FlashEvent:Event = null):void
+		{
+			super.onFocus(FlashEvent);
+			Tweensy.resume();
+		}
+
+		override protected function onFocusLost(FlashEvent:Event = null):void
+		{
+			super.onFocusLost(FlashEvent);
+			Tweensy.pause();
+		}
 	}
 }
