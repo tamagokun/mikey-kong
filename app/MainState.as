@@ -5,7 +5,7 @@ package
 
 	public class MainState extends FlxState
 	{
-		public var mikey_lives:int = 2;
+		public var mikey_lives:int = 4;
 		public var level:uint = 1;
 		public var lives:FlxGroup;
 		public var high_score:uint = 1000;
