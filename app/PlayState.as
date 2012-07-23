@@ -10,7 +10,10 @@ package
 	{
 		public var level:*;
 		public var barrels:FlxGroup;
+		// <3 <3 <3 <3 <3 <3 <3
 		public var mikey:Mikey;
+		public var manda:Manda;
+		// <3 <3 <3 <3 <3 <3 <3
 		public var dk:Kong;
 		public var bonus:uint = 4200;
 		public var time:uint = 0;
@@ -18,7 +21,8 @@ package
 		protected var label_bonus:FlxText;
 		protected var graphic_bonus:FlxSprite;
 		protected var bonus_timer:FlxTimer;
-		
+		protected var point_labels:FlxGroup;
+
 		[Embed(source="../assets/04B_11__.TTF", fontFamily="04B", embedAsCFF="false")]
 		public var Font04B:String;
 		[Embed(source="../assets/PressStart2P.ttf", fontFamily="2P", embedAsCFF="false")]
@@ -28,13 +32,14 @@ package
 		[Embed(source="../assets/audio/complete.mp3")] private var SndWin:Class;
 		[Embed(source="../assets/bonus-box.gif")] private var ImgBonus:Class;
 		[Embed(source="../assets/lives.gif")] private var ImgLife:Class;
+		[Embed(source="../assets/love.gif")] private var Love:Class;
 		
 		override public function create():void
 		{
 			//gui
 			graphic_bonus = new FlxSprite(179,40,ImgBonus);
 			add(graphic_bonus);
-			
+
 			label_bonus = new FlxText(183,46,50,"4200");
 			label_bonus.setFormat("2P",8,0x00ffff,"left");
 			add(label_bonus);
@@ -45,7 +50,7 @@ package
 			add(level.bricks);
 			if(level.stairs) add(level.stairs);
 			level.create();
-			
+
 			//create dk! oh noes!
 			dk = new Kong(this);
 			add(dk);
@@ -55,9 +60,16 @@ package
 			
 			//create mikey!
 			mikey = new Mikey(this);
-			mikey.lives = 4;
+			mikey.lives = main.mikey_lives;
 			add(mikey);
-			
+
+			//create manda!
+			manda = new Manda(this);
+			add(manda);
+
+			point_labels = new FlxGroup();
+			add(point_labels);
+
 			update_lives(mikey.lives);
 			
 			bonus_timer = new FlxTimer();
@@ -71,11 +83,34 @@ package
 			barrels.clear();
 			dk.kill();
 			dk.revive();
+			dk.start();
 			mikey.reset(31,228);
-			update_lives(mikey.lives);
+			mikey.alive = true;
+			update_lives(main.mikey_lives);
 			bonus = 4200;
+			label_bonus.text = "4200";
+			bonus_timer.destroy();
 			bonus_timer.start(2.5,0,decrease_bonus);
 			active = true;
+		}
+
+		public function died():void
+		{
+			main.mikey_lives--;
+			mikey.lives = main.mikey_lives;
+			//stop game.
+			active = false;
+			barrels.clear();
+			bonus_timer.stop();
+			dk.stop();
+			level.bgm.stop();
+		}
+
+		public function game_over():void
+		{
+			var game_over:FlxText = new FlxText(0,120,256,"GAME OVER");
+			game_over.setFormat("2P",8,0xffffff,"center");
+			add(game_over);
 		}
 		
 		public function create_barrel(X:uint,Y:uint):void
@@ -86,7 +121,7 @@ package
 		
 		public function destroy_barrel(Barrel:FlxSprite):void
 		{
-			var point:Object = {"x":Barrel.x,"y":Barrel.y};
+			var point:Object = {"x":Barrel.x + 4,"y":Barrel.y + 4};
 			Barrel.kill();
 			award_points(100,point);
 		}
@@ -97,11 +132,18 @@ package
 			var base:String = "000000";
 			base = base.slice(0,base.length - String(main.score).length);
 			main.label_score.text = base + String(main.score);
+			if(main.score > main.high_score)
+			{
+				main.high_score = main.score;
+				main.draw_high_score();
+			}
 			if(point)
 			{
-				var point_label:FlxText = new FlxText(point.x,point.y,50,String(main.score));
+				var point_label:FlxText = new FlxText(point.x - 25,point.y,50,String(amount));
 				point_label.setFormat("2P",8,0xffffff,"center");
-				//kill text after a couple seconds.
+				point_labels.add(point_label);
+				var delay_points:FlxTimer = new FlxTimer();
+				delay_points.start(1,1,destroy_point_label);
 			}
 		}
 		
@@ -113,7 +155,22 @@ package
 			base = base.slice(0,base.length - String(bonus).length);
 			label_bonus.text = base + String(bonus);
 		}
-		
+
+		public function destroy_point_label(Timer:FlxTimer):void
+		{
+			point_labels.remove(point_labels.members.pop(),true);
+			if(point_labels.length < 1) point_labels.clear();
+		}
+
+		public function go_next_level(Timer:FlxTimer):void
+		{
+			main.level++;
+			var base:String = "00";
+			base = base.slice(0,base.length - String(main.level).length);
+			main.label_level.text = "L=" + base + String(main.level);
+			main.state = LevelState;
+		}
+
 		override public function update():void
 		{
 			if(!active) return;
@@ -138,7 +195,18 @@ package
 				level.bgm.stop();
 				//you win!
 				FlxG.play(SndWin,1,false,true);
+				manda.play("stand");
+				var heart:FlxSprite = new FlxSprite(manda.x + 17, manda.y - 8,Love);
+				add(heart);
+				mikey.play("standing");
+				mikey.facing = FlxObject.LEFT;
+				mikey.x = manda.x + 30;
+				award_points(bonus);
+				bonus = 0;
+				label_bonus.text = "0000";
 				//go to next!
+				var to_next_level:FlxTimer = new FlxTimer();
+				to_next_level.start(5,1,go_next_level);
 			}
 			
 			if(mikey.y > FlxG.height) mikey.kill();
@@ -197,7 +265,7 @@ package
 				if(mikey.facing == FlxObject.LEFT && mikey.x <= Barrel.x)
 					destroy_barrel(Barrel);
 				else if(mikey.facing == FlxObject.RIGHT && mikey.x >= Barrel.x)
-					destroy_barrel(Barrel);	
+					destroy_barrel(Barrel);
 			}else
 			{
 				if(FlxCollision.pixelPerfectCheck(Barrel,Mikey))

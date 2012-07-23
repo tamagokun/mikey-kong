@@ -4,7 +4,7 @@ package elements
 	
 	public class Mikey extends FlxSprite
 	{
-		public var lives:uint = 0;
+		public var lives:int = 0;
 		public var jumping:Boolean = false;
 		public var ladder:Boolean = false;
 		public var climbing:Boolean = false;
@@ -36,6 +36,7 @@ package elements
 			addAnimation("ladder-top-up",[5,6,7],6+FlxG.random()*2,false);
 			addAnimation("ladder-top-down",[7,6,5],6+FlxG.random()*2,false);
 			addAnimation("hammer",[9,10],6+FlxG.random()*4,false);
+			addAnimation("dead",[8],0);
 			
 			_walk_sfx = FlxG.loadSound(SndWalk,1,true);
 			_jump_sfx = FlxG.loadSound(SndJump,1,false);
@@ -58,13 +59,28 @@ package elements
 		
 		override public function kill():void
 		{
-			super.kill();
-			lives--;
+			if(!alive) return; //we're already dead...
+			alive = false;
+			play("dead");
+			_walk_sfx.stop();
+			_jump_sfx.stop();
+			jumping = climbing = ladder = false;
+			_parent.died();
+			
 			if(lives < 0)
 			{
 				//GAME OVER
+				_parent.game_over();
 				return;
+			}else
+			{
+				var dead_timer:FlxTimer = new FlxTimer();
+				dead_timer.start(3,1,restart);
 			}
+		}
+
+		public function restart(Timer:FlxTimer):void
+		{
 			_parent.reset();
 		}
 		

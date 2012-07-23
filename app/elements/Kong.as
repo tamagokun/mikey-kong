@@ -25,8 +25,7 @@ package elements
 			
 			if(_parent !== null)
 			{
-				barrel_timer = new FlxTimer();
-				barrel_timer.start(4,0,find_barrel);
+				start();
 			}
 			
 			play("standing");
@@ -36,7 +35,14 @@ package elements
 		{
 			barrel_timer.stop();
 		}
-		
+
+		public function start():void
+		{
+			if(barrel_timer) barrel_timer.destroy();
+			barrel_timer = new FlxTimer();
+			barrel_timer.start(4,0,find_barrel);
+		}
+
 		public function find_barrel(Timer:FlxTimer):void
 		{
 			play("pickup_barrel");

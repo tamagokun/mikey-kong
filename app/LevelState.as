@@ -17,7 +17,7 @@ package
 			label_how_high = new FlxText(0,250,256,"HOW HIGH CAN YOU GET ?");
 			label_how_high.setFormat("2P",8,0xffffff,"center");
 			add(label_how_high);
-			display_how_high(4);
+			display_how_high(main.level);
 
 			FlxG.play(SndIntro,1,false,true);
 			var delay_timer:FlxTimer = new FlxTimer();
