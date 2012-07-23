@@ -21,6 +21,7 @@ package elements
 			addAnimation("hold_barrel",[11,11],4,false);
 			addAnimation("throw",[9,9],4,false);
 			addAnimation("climb",[4,5],8,true);
+			addAnimation("level",[10],0);
 			
 			if(_parent !== null)
 			{

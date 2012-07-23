@@ -4,24 +4,17 @@ package
 	import org.flixel.plugin.photonstorm.FlxCollision;
 	import elements.*;
 	import levels.*;
+	import overrides.*;
 	
-	public class PlayState extends FlxState
+	public class PlayState extends ChildState
 	{
 		public var level:*;
-		public var lives:FlxGroup;
 		public var barrels:FlxGroup;
 		public var mikey:Mikey;
 		public var dk:Kong;
-		public var score:uint = 0;
 		public var bonus:uint = 4200;
 		public var time:uint = 0;
 		
-		protected var label_score:FlxText;
-		protected var label_time:FlxText;
-		protected var label_player1:FlxText;
-		protected var label_high_score:FlxText;
-		protected var high_score:FlxText;
-		protected var label_level:FlxText;
 		protected var label_bonus:FlxText;
 		protected var graphic_bonus:FlxSprite;
 		protected var bonus_timer:FlxTimer;
@@ -31,18 +24,21 @@ package
 		[Embed(source="../assets/PressStart2P.ttf", fontFamily="2P", embedAsCFF="false")]
 		public var Font2P:String;
 		
-		[Embed(source="../assets/bonus-box.gif")] private var ImgBonus:Class;
-		[Embed(source="../assets/lives.gif")] private var ImgLife:Class;
 		[Embed(source="../assets/audio/bacmusic.mp3")] private var SndLevel:Class;
 		[Embed(source="../assets/audio/complete.mp3")] private var SndWin:Class;
+		[Embed(source="../assets/bonus-box.gif")] private var ImgBonus:Class;
+		[Embed(source="../assets/lives.gif")] private var ImgLife:Class;
 		
 		override public function create():void
 		{
 			//gui
-			lives = new FlxGroup();
-			add(lives);
-			setup_labels();
+			graphic_bonus = new FlxSprite(179,40,ImgBonus);
+			add(graphic_bonus);
 			
+			label_bonus = new FlxText(183,46,50,"4200");
+			label_bonus.setFormat("2P",8,0x00ffff,"left");
+			add(label_bonus);
+
 			//level init stuff
 			level = new Level1(this) as Level1;
 			add(level.ladders);
@@ -97,13 +93,13 @@ package
 		
 		public function award_points(amount:uint, point:Object = null):void
 		{
-			score += amount;
+			main.score += amount;
 			var base:String = "000000";
-			base = base.slice(0,base.length - String(score).length);
-			label_score.text = base + String(score);
+			base = base.slice(0,base.length - String(main.score).length);
+			main.label_score.text = base + String(main.score);
 			if(point)
 			{
-				var point_label:FlxText = new FlxText(point.x,point.y,50,String(score));
+				var point_label:FlxText = new FlxText(point.x,point.y,50,String(main.score));
 				point_label.setFormat("2P",8,0xffffff,"center");
 				//kill text after a couple seconds.
 			}
@@ -211,43 +207,13 @@ package
 		
 		public function update_lives(amount:int):void
 		{
-			lives.clear();
+			main.lives.clear();
 			var i:uint = 0;
 			for(i; i < amount; i++)
 			{
 				var life:FlxSprite = new FlxSprite(17+(i*8),24,ImgLife);
-				lives.add(life);
+				main.lives.add(life);
 			}
-		}
-		
-		protected function setup_labels():void
-		{
-			label_score = new FlxText(17,8,63,"000000");
-			label_score.setFormat("2P",8,0xffffff,"left");
-			add(label_score);
-			
-			label_player1 = new FlxText(33,0,40,"1UP");
-			label_player1.setFormat("2P",8,0xff0000,"left");
-			add(label_player1);
-			
-			label_high_score = new FlxText(81,0,100,"HIGH SCORE");
-			label_high_score.setFormat("2P",8,0xff0000,"center");
-			add(label_high_score);
-			
-			high_score = new FlxText(81,8,100,"000000");
-			high_score.setFormat("2P",8,0xffffff,"center");
-			add(high_score);
-			
-			label_level = new FlxText(178,24,50,"L=00");
-			label_level.setFormat("2P",8,0x0000aa,"left");
-			add(label_level);
-			
-			graphic_bonus = new FlxSprite(179,40,ImgBonus);
-			add(graphic_bonus);
-			
-			label_bonus = new FlxText(183,46,50,"4200");
-			label_bonus.setFormat("2P",8,0x00ffff,"left");
-			add(label_bonus);
 		}
 	}
 }
