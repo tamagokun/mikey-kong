@@ -92,6 +92,7 @@ package
 			bonus_timer.destroy();
 			bonus_timer.start(2.5,0,decrease_bonus);
 			active = true;
+			level.bgm.play();
 		}
 
 		public function died():void
@@ -108,7 +109,7 @@ package
 
 		public function game_over():void
 		{
-			var game_over:FlxText = new FlxText(0,120,256,"GAME OVER");
+			var game_over:FlxText = new FlxText(0,128,256,"GAME OVER");
 			game_over.setFormat("2P",8,0xffffff,"center");
 			add(game_over);
 		}
@@ -173,8 +174,8 @@ package
 
 		override public function update():void
 		{
-			if(!active) return;
 			super.update();
+			if(!active) return;
 			
 			FlxG.overlap(barrels, mikey, touch_barrel);
 			FlxG.collide(level.bricks, barrels);
@@ -188,7 +189,6 @@ package
 			if(level.completed())
 			{
 				//stop game.
-				active = false;
 				barrels.clear();
 				bonus_timer.stop();
 				dk.stop();
@@ -198,6 +198,7 @@ package
 				manda.play("stand");
 				var heart:FlxSprite = new FlxSprite(manda.x + 17, manda.y - 8,Love);
 				add(heart);
+				dk.play("ouchie");
 				mikey.play("standing");
 				mikey.facing = FlxObject.LEFT;
 				mikey.x = manda.x + 30;

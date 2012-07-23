@@ -22,6 +22,7 @@ package elements
 			addAnimation("throw",[9,9],4,false);
 			addAnimation("climb",[4,5],8,true);
 			addAnimation("level",[10],0);
+			addAnimation("ouchie",[6,7,6,7,6,7,6,7],2,false);
 			
 			if(_parent !== null)
 			{
@@ -30,7 +31,7 @@ package elements
 			
 			play("standing");
 		}
-		
+
 		public function stop():void
 		{
 			barrel_timer.stop();
