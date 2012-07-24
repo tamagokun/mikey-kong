@@ -3,10 +3,20 @@
 <head>
 	<title>Mikey Kong</title>
 	<style type="text/css">
+		body { background: black; }
 		#instructions { width: 512px; }
 		#instructions iframe { float: right; }
 		.gap { width: 200px; }
 		p { margin: 0; padding: 6px 0; }
+		.key {
+			display: inline-block;
+			background: #eee;
+			padding: 2px 5px;
+			border: 1px solid #999;
+			border-radius: 2px;
+			font-family: Courier New, sans-serif;
+			color: #666;
+		}
 	</style>
 </head>
 <body>
@@ -18,7 +28,7 @@
 	</div>
 	<div id="instructions">
 		<iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=tamagokun&repo=mikey-kong&type=fork&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="146px" height="30px"></iframe>
-		<p>[Space] - Jump<span class="gap"></span>[Left, Right, Up, Down] - Move</p>
+		<p><span class="key">Space</span> &mdash; Jump<span class="gap"></span><span class="key">Left, Right, Up, Down</span> &mdash; Move</p>
 	</div>
 </body>
 </html>
