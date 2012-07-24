@@ -17,6 +17,7 @@ package
 		public var dk:Kong;
 		public var bonus:uint = 4200;
 		public var time:uint = 0;
+		public var completed:Boolean = false;
 		
 		protected var label_bonus:FlxText;
 		protected var graphic_bonus:FlxSprite;
@@ -92,6 +93,7 @@ package
 			bonus_timer.destroy();
 			bonus_timer.start(2.5,0,decrease_bonus);
 			active = true;
+			completed = false;
 			level.bgm.play();
 		}
 
@@ -189,6 +191,7 @@ package
 			if(level.completed())
 			{
 				//stop game.
+				completed = true;
 				barrels.clear();
 				bonus_timer.stop();
 				dk.stop();
@@ -199,6 +202,7 @@ package
 				var heart:FlxSprite = new FlxSprite(manda.x + 17, manda.y - 8,Love);
 				add(heart);
 				dk.play("ouchie");
+				mikey.clear_states();
 				mikey.play("standing");
 				mikey.facing = FlxObject.LEFT;
 				mikey.x = manda.x + 30;

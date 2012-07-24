@@ -56,15 +56,22 @@ package elements
 			}else
 				super.postUpdate();
 		}
-		
+
+		public function clear_states():void
+		{
+			acceleration.x = 0;
+			acceleration.y = 350;
+			_walk_sfx.stop();
+			_jump_sfx.stop();
+			jumping = climbing = ladder = false;
+		}
+
 		override public function kill():void
 		{
 			if(!alive) return; //we're already dead...
 			alive = false;
+			clear_states();
 			play("dead");
-			_walk_sfx.stop();
-			_jump_sfx.stop();
-			jumping = climbing = ladder = false;
 			_parent.died();
 			
 			if(lives < 0)
@@ -86,6 +93,7 @@ package elements
 		
 		override public function update():void
 		{
+			if(!_parent.active || _parent.completed) return;
 			acceleration.x = 0;
 			if(FlxG.keys.LEFT || FlxG.keys.RIGHT && !climbing)
 			{
