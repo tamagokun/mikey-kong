@@ -202,6 +202,7 @@ package
 				var heart:FlxSprite = new FlxSprite(manda.x + 17, manda.y - 8,Love);
 				add(heart);
 				dk.play("ouchie");
+				mikey.alive = false;
 				mikey.clear_states();
 				mikey.play("standing");
 				mikey.facing = FlxObject.LEFT;
